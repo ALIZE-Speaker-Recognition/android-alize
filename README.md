@@ -150,9 +150,9 @@ Since we have not unloaded it yet (through `alizeSystem.resetAudio()` and `alize
 SpkRecResult identificationResult = alizeSystem.identifySpeaker();
 ```
 
-`identificationResult.match` is a boolean indicating the resulting decision: if `true`, the signal matches the speaker model.
-`identificationResult.speakerId`
-`identificationResult.score` gives the score on which the decision is based.
+`identificationResult.match` is a boolean indicating the resulting decision: if `true`, the signal matches one of the speaker models in the database.
+`identificationResult.speakerId`, of type String, gives the ID of the best matching speaker.
+`identificationResult.score` gives the score obtained for the best matching speaker model.
 
 
 #### Exceptions
