@@ -41,6 +41,8 @@ In order to parameterize the audio signal, this package uses SPro:
 
 Download the source from the SPro website and put the folder at the same path as the other two (the name for the folder is expected to be `spro`, with no version number).
 
+⚠️**Warning:** ALIZÉ is only compatible with revisions 155 and up of SPro, which are the only ones fully compatible with 64-bit CPUs. However, at the time of this writing, these versions of SPro are only available through Subversion and the direct download link given on the website points to an older revision of SPro 5, which includes a bug when compiled for 64 bit systems and is not compatible with ALIZÉ.
+
 
 ### How to compile
 
