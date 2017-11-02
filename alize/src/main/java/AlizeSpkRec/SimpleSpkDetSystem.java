@@ -77,7 +77,7 @@ public class SimpleSpkDetSystem
     public native void createSpeakerModel(String speakerId) throws AlizeException;
     public native void adaptSpeakerModel(String speakerId) throws AlizeException;
 
-    public class SpkRecResult
+    public static class SpkRecResult
     {
         public boolean match;
         public float score;
@@ -89,22 +89,12 @@ public class SimpleSpkDetSystem
     public SpkRecResult verifySpeaker(String targetSpeakerId) throws AlizeException {
         return verifySpeaker(targetSpeakerId, false);
     }
-    public SpkRecResult verifySpeaker(String targetSpeakerId, boolean withScoreAccumulation) throws AlizeException {
-        SpkRecResult result = new SpkRecResult();
-        verifySpeaker(targetSpeakerId, withScoreAccumulation, result);
-        return result;
-    }
-    private native void verifySpeaker(String targetSpeakerId, boolean withScoreAccumulation, SpkRecResult result) throws AlizeException;
+    private native SpkRecResult verifySpeaker(String targetSpeakerId, boolean withScoreAccumulation) throws AlizeException;
 
     public SpkRecResult identifySpeaker() throws AlizeException {
         return identifySpeaker(false);
     }
-    public SpkRecResult identifySpeaker(boolean withScoreAccumulation) throws AlizeException {
-        SpkRecResult result = new SpkRecResult();
-        identifySpeaker(withScoreAccumulation, result);
-        return result;
-    }
-    public native void identifySpeaker(boolean withScoreAccumulation, SpkRecResult result) throws AlizeException;
+    public native SpkRecResult identifySpeaker(boolean withScoreAccumulation) throws AlizeException;
 
     public native void resetAccumulatedScore(String speakerId) throws AlizeException;
     public native void resetAllAccumulatedScores() throws AlizeException;

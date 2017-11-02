@@ -172,16 +172,16 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_adaptSpeakerModel
  * Method:    verifySpeaker
  * Signature: (Ljava/lang/String;Z)LAlizeSpkRec/SimpleSpkDetSystem/SpkRecResult;
  */
-JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
-  (JNIEnv *, jobject, jstring, jboolean, jobject result);
+JNIEXPORT jobject JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
+  (JNIEnv *, jobject, jstring, jboolean);
 
 /*
  * Class:     AlizeSpkRec_SimpleSpkDetSystem
  * Method:    identifySpeaker
  * Signature: (Z)LAlizeSpkRec/SimpleSpkDetSystem/SpkRecResult;
  */
-JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_identifySpeaker
-  (JNIEnv *, jobject, jboolean, jobject result);
+JNIEXPORT jobject JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_identifySpeaker
+  (JNIEnv *, jobject, jboolean);
 
 /*
  * Class:     AlizeSpkRec_SimpleSpkDetSystem

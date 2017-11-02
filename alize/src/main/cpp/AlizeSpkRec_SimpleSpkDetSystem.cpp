@@ -381,8 +381,8 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_adaptSpeakerModel
  * Method:    verifySpeaker
  * Signature: (Ljava/lang/String;Z)LAlizeSpkRec/SimpleSpkDetSystem/SpkRecResult;
  */
-JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
-        (JNIEnv *env, jobject obj, jstring jSpeakerId, jboolean jAccumulateScores, jobject result)
+JNIEXPORT jobject JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
+        (JNIEnv *env, jobject obj, jstring jSpeakerId, jboolean jAccumulateScores)
 {
     const char* speakerId = env->GetStringUTFChars(jSpeakerId, NULL);
     float score;
@@ -392,11 +392,13 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
     } catch(Exception& e) {
         transferExceptionToJava(env, e);
         env->ReleaseStringUTFChars(jSpeakerId, speakerId);
-        return;
+        return 0;
     }
     env->ReleaseStringUTFChars(jSpeakerId, speakerId);
 
     jclass resultClass = env->FindClass("AlizeSpkRec/SimpleSpkDetSystem$SpkRecResult");
+    jmethodID resultConstructor = env->GetMethodID(resultClass, "<init>", "()V");
+    jobject result = env->NewObject(resultClass, resultConstructor);
 
     jfieldID matchFieldId = env->GetFieldID(resultClass, "match", "Z");
     env->SetBooleanField(result, matchFieldId, (jboolean)match);
@@ -408,6 +410,7 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
     env->SetObjectField(result, speakerIdFieldId, jSpeakerId);
 
     env->DeleteLocalRef(resultClass);
+    return result;
 }
 
 /*
@@ -415,8 +418,8 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_verifySpeaker
  * Method:    identifySpeaker
  * Signature: (Z)LAlizeSpkRec/SimpleSpkDetSystem/SpkRecResult;
  */
-JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_identifySpeaker
-        (JNIEnv *env, jobject obj, jboolean jAccumulateScores, jobject result)
+JNIEXPORT jobject JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_identifySpeaker
+        (JNIEnv *env, jobject obj, jboolean jAccumulateScores)
 {
     String foundSpeakerId;
     float score;
@@ -425,10 +428,12 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_identifySpeaker
         match = nativeSystem(env,obj)->identifySpeaker(foundSpeakerId, score, (jAccumulateScores==JNI_TRUE));
     } catch(Exception& e) {
         transferExceptionToJava(env, e);
-        return;
+        return 0;
     }
 
     jclass resultClass = env->FindClass("AlizeSpkRec/SimpleSpkDetSystem$SpkRecResult");
+    jmethodID resultConstructor = env->GetMethodID(resultClass, "<init>", "()V");
+    jobject result = env->NewObject(resultClass, resultConstructor);
 
     jfieldID matchFieldId = env->GetFieldID(resultClass, "match", "Z");
     env->SetBooleanField(result, matchFieldId, (jboolean)match);
@@ -440,6 +445,7 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_identifySpeaker
     env->SetObjectField(result, speakerIdFieldId, env->NewStringUTF(foundSpeakerId.c_str()));
 
     env->DeleteLocalRef(resultClass);
+    return result;
 }
 
 /*
