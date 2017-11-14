@@ -132,11 +132,29 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_addAudio___3B
     long dataSize = env->GetArrayLength(jData);
     jbyte *data = env->GetByteArrayElements(jData, NULL);
     try {
-        nativeSystem(env,obj)->addAudio((uint32_t )dataSize, (uint8_t*)data);
+        nativeSystem(env,obj)->addAudio((uint32_t )dataSize, (void*)data);
     } catch(Exception& e) {
         transferExceptionToJava(env, e);
     }
     env->ReleaseByteArrayElements(jData, data, JNI_ABORT);
+}
+
+/*
+ * Class:     AlizeSpkRec_SimpleSpkDetSystem
+ * Method:    addAudio
+ * Signature: ([S)V
+ */
+JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_addAudio___3S
+        (JNIEnv *env, jobject obj, jshortArray jSamples)
+{
+    long sampleCount = env->GetArrayLength(jSamples);
+    jshort *samples = env->GetShortArrayElements(jSamples, NULL);
+    try {
+        nativeSystem(env,obj)->addAudio((uint32_t )sampleCount, (int16_t*)samples);
+    } catch(Exception& e) {
+        transferExceptionToJava(env, e);
+    }
+    env->ReleaseShortArrayElements(jSamples, samples, JNI_ABORT);
 }
 
 /*

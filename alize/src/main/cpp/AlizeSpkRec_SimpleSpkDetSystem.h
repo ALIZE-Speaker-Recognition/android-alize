@@ -58,6 +58,14 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_addAudio___3B
 /*
  * Class:     AlizeSpkRec_SimpleSpkDetSystem
  * Method:    addAudio
+ * Signature: ([S)V
+ */
+JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_addAudio___3S
+  (JNIEnv *, jobject, jshortArray);
+
+/*
+ * Class:     AlizeSpkRec_SimpleSpkDetSystem
+ * Method:    addAudio
  * Signature: (Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_addAudio__Ljava_lang_String_2

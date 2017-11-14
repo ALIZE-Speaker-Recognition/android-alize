@@ -52,6 +52,18 @@ In the `Build` menu, select `Build APK`. It will generate an Android archive for
 
 ### How to use it
 
+#### Audio input
+
+This library does not handle audio recording. Audio is passed to the speaker recognition system using the various `addAudio` methods.
+
+The frequency of the audio signal must be specified in the configuration file, using the parameter `SPRO_sampleRate`.
+The default format for the audio samples is **16-bit, signed integer linear PCM**.
+
+The parameter `SPRO_format` may be used in the configuration file in order to specify a different format (refer to `spro.h` for the list of formats supported by SPro). However, it is unlikely to be useful in the context of ALIZÉ for Android.
+If a different sample/file format is specified this way, it will be used to process audio data sent to the system using the methods `addAudio(String filename)`, `addAudio(InputStream audioDataStream)` and `addAudio(byte[] audioData)`.
+But the method `addAudio(short[] linearPCMSamples)`, as its signature and parameter name imply, always expects 16-bit, signed integer linear PCM, ignoring the setting for `SPRO_format`.
+
+
 #### Import the library
 
 In Android Studio, import the AAR archive into your application project as a new module (`File` ▸ `New` ▸ `New Module…`, then `Import .JAR/.AAR Package`). Remember to update the app module's `build.gradle` file to include the library in the dependencies.
@@ -74,7 +86,7 @@ The configuration can be provided by passing the constructor either a file name,
 The latter is particularly useful in the common case where the configuration file is packaged as an application asset, as illustrated below.
 
 ```java
-InputStream configAsset = getApplicationContext().getAssets().open("AlizeDefault.cfg");
+InputStream configAsset = getApplicationContext().getAssets().open("MyConfig.cfg");
 SimpleSpkDetSystem alizeSystem = new SimpleSpkDetSystem(configAsset, getApplicationContext().getFilesDir().getPath());
 configAsset.close();
 ```
@@ -97,8 +109,9 @@ System.out.println("  UBM is loaded: " + alizeSystem.isUBMLoaded());    // true
 
 #### Train a speaker model
 ```java
-// Record audio in the format specified in the configuration file and return it as an array of bytes
-byte[] audio = …
+// Record audio
+// The system takes 16-bit, signed integer linear PCM, at the frequency specified in the configuration file.
+short[] audio = …
 
 // Send audio to the system
 alizeSystem.addAudio(audio);
@@ -120,10 +133,10 @@ alizeSystem.resetFeatures();
 #### Perform speaker verification
 ```java
 // Record some more audio
-audio = …
+short[] moreAudio = …
 
 // Send the new audio to the system
-alizeSystem.addAudio(audio);
+alizeSystem.addAudio(moreAudio);
 
 // Perform speaker verification against the model we created earlier
 SpkRecResult verificationResult = alizeSystem.verifySpeaker("Somebody");

@@ -35,22 +35,23 @@ public class SimpleSpkDetSystem
     public native String[] speakerIDs() throws AlizeException;
     public native void setOption(String name, String value) throws AlizeException;
 
-    public native void addAudio(byte[] data) throws AlizeException;
+    public native void addAudio(short[] linearPCMSamples) throws AlizeException;
     public native void addAudio(String filename) throws AlizeException;
-    public void addAudio(InputStream audio) throws AlizeException, IOException
+    public void addAudio(InputStream audioDataStream) throws AlizeException, IOException
     {
-        File tmpAudioFile = transferDataToWorkdir(audio,"tmp_audio",".audio");
+        File tmpAudioFile = transferDataToWorkdir(audioDataStream,"tmp_audio",".audio");
         addAudio(tmpAudioFile.getAbsolutePath());
         tmpAudioFile.delete();
     }
+    public native void addAudio(byte[] audioData) throws AlizeException;
     public native void saveAudio(String filename) throws AlizeException;
     public native void resetAudio() throws AlizeException;
 
-    public native void addFeatures(byte[] data) throws AlizeException;
+    public native void addFeatures(byte[] featureData) throws AlizeException;
     public native void addFeatures(String filename) throws AlizeException;
-    public void addFeatures(InputStream features) throws AlizeException, IOException
+    public void addFeatures(InputStream featureDataStream) throws AlizeException, IOException
     {
-        File tmpFeatureFile = transferDataToWorkdir(features,"tmp_features",".prm");
+        File tmpFeatureFile = transferDataToWorkdir(featureDataStream,"tmp_features",".prm");
         addFeatures(tmpFeatureFile.getAbsolutePath());
         tmpFeatureFile.delete();
     }
