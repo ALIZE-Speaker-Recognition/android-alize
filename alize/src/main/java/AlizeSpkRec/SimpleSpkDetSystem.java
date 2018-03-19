@@ -1,6 +1,11 @@
 package AlizeSpkRec;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class SimpleSpkDetSystem
 {
@@ -36,19 +41,19 @@ public class SimpleSpkDetSystem
     public native void setOption(String name, String value) throws AlizeException;
 
     public native void addAudio(short[] linearPCMSamples) throws AlizeException;
-    public native void addAudio(String filename) throws AlizeException;
+    public native void addAudio(String filename) throws AlizeException, IOException;
     public void addAudio(InputStream audioDataStream) throws AlizeException, IOException
     {
         File tmpAudioFile = transferDataToWorkdir(audioDataStream,"tmp_audio",".audio");
         addAudio(tmpAudioFile.getAbsolutePath());
         tmpAudioFile.delete();
     }
-    public native void addAudio(byte[] audioData) throws AlizeException;
+    public native void addAudio(byte[] audioData) throws AlizeException, IOException;
     public native void saveAudio(String filename) throws AlizeException;
     public native void resetAudio() throws AlizeException;
 
-    public native void addFeatures(byte[] featureData) throws AlizeException;
-    public native void addFeatures(String filename) throws AlizeException;
+    public native void addFeatures(byte[] featureData) throws AlizeException, IOException;
+    public native void addFeatures(String filename) throws AlizeException, IOException;
     public void addFeatures(InputStream featureDataStream) throws AlizeException, IOException
     {
         File tmpFeatureFile = transferDataToWorkdir(featureDataStream,"tmp_features",".prm");
@@ -65,7 +70,7 @@ public class SimpleSpkDetSystem
         loadBackgroundModel(tmpModelFile.getAbsolutePath());
         tmpModelFile.delete();
     }
-    public native void loadSpeakerModel(String speakerId, String filename) throws AlizeException;
+    public native void loadSpeakerModel(String speakerId, String filename) throws AlizeException, IOException;
     public void loadSpeakerModel(String speakerId, InputStream model) throws AlizeException, IOException
     {
         File tmpModelFile = transferDataToWorkdir(model,"tmp_"+speakerId,".gmm");
@@ -75,7 +80,7 @@ public class SimpleSpkDetSystem
     public native void saveSpeakerModel(String speakerId, String filename) throws AlizeException;
     public native void removeSpeaker(String speakerId) throws AlizeException;
     public native void removeAllSpeakers() throws AlizeException;
-    public native void createSpeakerModel(String speakerId) throws AlizeException;
+    public native void createSpeakerModel(String speakerId) throws IdAlreadyExistsException;
     public native void adaptSpeakerModel(String speakerId) throws AlizeException;
 
     public static class SpkRecResult
