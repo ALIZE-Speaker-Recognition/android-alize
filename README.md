@@ -36,12 +36,13 @@ It is the responsibility of the host application to perform audio capture from t
 You need to get the source for `alize-core` and `LIA_RAL` from their respective repositories, and put the two source folders at this path:
 `{project_root}/alize/src/main/cpp/`
 
-In order to parameterize the audio signal, this package uses SPro:
+In order to extract features from the audio signal, ALIZÉ relies on the free speech signal processing toolkit SPro, developed by Guillaume Gravier at IRISA:
 <https://gforge.inria.fr/projects/spro/>
 
-Download the source from the SPro website and put the folder at the same path as the other two (the name for the folder is expected to be `spro`, with no version number).
+You need to download the source code package for SPro (please read the warning below), uncompress/unarchive it, and put the resulting folder at the same path as the other two (`{project_root}/alize/src/main/cpp/`). The name for the folder is expected to be `spro`, with no version number. There is no need to compile SPro using the `configure` script and makefile provided in the package; only access to the source code is required.
 
-⚠️**Warning:** ALIZÉ is only compatible with revisions 155 and up of SPro, which are the only ones fully compatible with 64-bit CPUs. However, at the time of this writing, these versions of SPro are only available through Subversion and the direct download link given on the website points to an older revision of SPro 5, which includes a bug when compiled for 64 bit systems and is not compatible with ALIZÉ.
+⚠️**Warning:** Note that only the revisions 155 and up of SPro are fully compatible with 64-bit CPUs and ALIZÉ. However, at the time of this writing, these versions of SPro are only available through Subversion, and the direct download link given on the website above points to an older revision of SPro 5 which includes a bug leading to corrupted feature files when compiled for 64 bit systems.
+If you want to be sure to get the right version of SPro for use with ALIZÉ, you can download it from ALIZÉ's website: <http://alize.univ-avignon.fr/spro-5.0-157.tar.gz>.
 
 
 ### How to compile
