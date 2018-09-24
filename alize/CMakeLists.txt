@@ -19,7 +19,6 @@ add_definitions(
              )
 
 include_directories(
-             src/main/cpp/spro
              src/main/cpp/alize-core/include
              src/main/cpp/LIA_RAL/LIA_SpkTools/include
              src/main/cpp/LIA_RAL/include/Eigen
@@ -86,6 +85,7 @@ include_directories(
              src/main/cpp/LIA_RAL/LIA_Utils/Svm/include
              src/main/cpp/LIA_RAL/LIA_Utils/Svm/include
 
+             src/main/cpp/spro
               )
 
 # Creates and names a library, sets it as either STATIC
