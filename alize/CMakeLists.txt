@@ -112,6 +112,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/alize-core/src/BoolMatrix.cpp
              src/main/cpp/alize-core/src/CmdLine.cpp
              src/main/cpp/alize-core/src/Config.cpp
+             src/main/cpp/alize-core/src/ConfigChecker.cpp
              src/main/cpp/alize-core/src/ConfigFileReaderAbstract.cpp
              src/main/cpp/alize-core/src/ConfigFileReaderRaw.cpp
              src/main/cpp/alize-core/src/ConfigFileReaderXml.cpp
