@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/alize/alize.iml" filepath="$PROJECT_DIR$/alize/alize.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-alize.iml" filepath="$PROJECT_DIR$/android-alize.iml" />
+      <module fileurl="file://$PROJECT_DIR$/alize/alize.iml" filepath="$PROJECT_DIR$/alize/alize.iml" />
     </modules>
   </component>
 </project>

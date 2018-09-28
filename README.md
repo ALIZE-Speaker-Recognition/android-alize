@@ -48,10 +48,21 @@ If you want to be sure to get the right version of SPro for use with ALIZÉ, you
 ### How to compile
 
 Once all three source folders (`alize-core`, `LIA_RAL`, `spro`) are in place, open the project with Android Studio.
-In the `Build` menu, select `Build APK`. It will generate an Android archive for ALIZÉ, which you can then import as a module in your application projects.
+When you build the project, it will generate an Android archive (`.aar`) for ALIZÉ, which you can then import as a module in your application projects.
 
 
-### How to use it
+### How to use ALIZÉ in your application
+
+#### Import the library
+
+In Android Studio, import the AAR archive into your application project as a new module (`File` ▸ `New` ▸ `New Module…`, then `Import .JAR/.AAR Package`). Remember to update the app module's `build.gradle` file to include the library in the dependencies.
+
+The procedure is detailed on this webpage: <https://developer.android.com/studio/projects/android-library.html>
+
+The Java classes providing access to ALIZÉ are then available in the `AlizeSpkRec` package:
+```java
+import AlizeSpkRec.*;
+```
 
 #### Audio input
 
@@ -64,17 +75,6 @@ The parameter `SPRO_format` may be used in the configuration file in order to sp
 If a different sample/file format is specified this way, it will be used to process audio data sent to the system using the methods `addAudio(String filename)`, `addAudio(InputStream audioDataStream)` and `addAudio(byte[] audioData)`.
 But the method `addAudio(short[] linearPCMSamples)`, as its signature and parameter name imply, always expects 16-bit, signed integer linear PCM, ignoring the setting for `SPRO_format`.
 
-
-#### Import the library
-
-In Android Studio, import the AAR archive into your application project as a new module (`File` ▸ `New` ▸ `New Module…`, then `Import .JAR/.AAR Package`). Remember to update the app module's `build.gradle` file to include the library in the dependencies.
-
-The procedure is detailed on this webpage: <https://developer.android.com/studio/projects/android-library.html>
-
-The Java classes providing access to ALIZÉ are then available in the `AlizeSpkRec` package:
-```java
-import AlizeSpkRec.*;
-```
 
 #### Create an instance of a speaker recognition system
 
@@ -92,7 +92,7 @@ SimpleSpkDetSystem alizeSystem = new SimpleSpkDetSystem(configAsset, getApplicat
 configAsset.close();
 ```
 
-We then load the background model, also from the application assets.
+We then load the background model (aka "world model", aka "UBM"), also from the application assets.
 
 ```java
 InputStream backgroundModelAsset = getApplicationContext().getAssets().open("gmm/world.gmm");
@@ -100,15 +100,23 @@ alizeSystem.loadBackgroundModel(backgroundModelAsset);
 backgroundModelAsset.close();
 ```
 
+It is best to fine-tune the configuration to your specific usage of speaker recognition, and to train a background model with data recorded in the conditions matching that usage.
+But you may start with the example configuration file provided in this repository (`AlizeExampleConfiguration.cfg`). It matches the configuration used in the GMM/UBM tutorial found on ALIZÉ's web site, which allows you to use the background model generated in the tutorial: run the tutorial, and then copy the file `world.gmm` into your application's assets.
+While neither this configuration file nor this background model will be a perfect fit for your application, they provide a good starting point to use during development.
+
+
 #### Check system status
+
+You may make use of the methods below (particularly `speakerCount`) to display information in your user interface:
 ```java
 System.out.println("System status:");
-System.out.println("  # of features: " + alizeSystem.featureCount());   // at this point, 0
-System.out.println("  # of models: " + alizeSystem.speakerCount());     // at this point, 0
-System.out.println("  UBM is loaded: " + alizeSystem.isUBMLoaded());    // true
+System.out.println("  # of features: " + alizeSystem.featureCount());   // at this point in our example, 0
+System.out.println("  # of models: " + alizeSystem.speakerCount());     // at this point in our example, 0
+System.out.println("  UBM is loaded: " + alizeSystem.isUBMLoaded());    // true, since we just loaded it
 ```
 
 #### Train a speaker model
+
 ```java
 // Record audio
 // The system takes 16-bit, signed integer linear PCM, at the frequency specified in the configuration file.
@@ -118,18 +126,31 @@ short[] audio = …
 alizeSystem.addAudio(audio);
 
 // Train a model with the audio
-alizeSystem.createSpeakerModel("Somebody");
+alizeSystem.createSpeakerModel("John Doe");
 ```
 
 After this, `alizeSystem.speakerCount()` returns 1.
 `alizeSystem.featureCount()` > 0 and corresponds to the number of feature vectors extracted from the audio signal.
 
+Speaker models reside in RAM and are not automatically written to permanent storage. If you want to keep them between runs of your application, you need to explicitly save them.
+
+```java
+// Write a speaker model to disk
+alizeSystem.saveSpeakerModel("John Doe", "John Doe");
+```
+
 
 #### Reset input before sending another signal
+
+You may run several operations on the same signal without having to send it to the system every time: perform verification against various speaker models, update one of them, etc.
+But once done using this audio signal, it is important to remember to clear the input buffers before starting to work with another, unrelated sound signal.
+
 ```java
 alizeSystem.resetAudio();
 alizeSystem.resetFeatures();
 ```
+
+`alizeSystem.featureCount()` == 0
 
 #### Perform speaker verification
 ```java
@@ -148,6 +169,10 @@ SpkRecResult verificationResult = alizeSystem.verifySpeaker("Somebody");
 
 
 #### Load a pre-trained speaker model packaged with the application
+
+For some application, it may make sense to embed some pre-trained speaker models as assets.
+You can use the `InputStream`-based version of `loadSpeakerModel` in order to load such models.
+
 ```java
 InputStream modelAsset = getApplicationContext().getAssets().open("gmm/somebody_else.gmm");
 alizeSystem.loadSpeakerModel("Somebody else", modelAsset);
@@ -158,6 +183,7 @@ At this point, `alizeSystem.speakerCount() == 2`.
 
 
 #### Perform speaker identification
+
 With two speaker models, we can try speaker identification.
 We will use the same audio signal as previously.
 Since we have not unloaded it yet (through `alizeSystem.resetAudio()` and `alizeSystem.resetFeatures()`), there is no need to resend it.
