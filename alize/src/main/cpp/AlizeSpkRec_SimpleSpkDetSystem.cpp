@@ -123,6 +123,38 @@ JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_setOption
 
 /*
  * Class:     AlizeSpkRec_SimpleSpkDetSystem
+ * Method:    decisionThreshold
+ * Signature: ()D
+ */
+JNIEXPORT jdouble JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_decisionThreshold
+        (JNIEnv *env, jobject obj)
+{
+    jdouble decisionThreshold = 0;
+    try {
+        decisionThreshold = (jdouble)(nativeSystem(env, obj)->decisionThreshold());
+    } catch(Exception& e) {
+        transferExceptionToJava(env, e);
+    }
+    return decisionThreshold;
+}
+
+/*
+ * Class:     AlizeSpkRec_SimpleSpkDetSystem
+ * Method:    setDecisionThreshold
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_AlizeSpkRec_SimpleSpkDetSystem_setDecisionThreshold
+        (JNIEnv *env, jobject obj, jdouble newValue)
+{
+    try {
+        (nativeSystem(env, obj)->setDecisionThreshold(newValue));
+    } catch(Exception& e) {
+        transferExceptionToJava(env, e);
+    }
+}
+
+/*
+ * Class:     AlizeSpkRec_SimpleSpkDetSystem
  * Method:    addAudio
  * Signature: ([B)V
  */

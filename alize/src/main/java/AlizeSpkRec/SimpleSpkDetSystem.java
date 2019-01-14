@@ -86,6 +86,22 @@ public class SimpleSpkDetSystem
      */
     public native void setOption(String name, String value) throws AlizeException;
 
+    /*! \fn void SimpleSpkDetSystem::decisionThreshold()
+     *  \brief  Returns the theshold used in verifySpeaker() and identifySpeaker()
+     *          Only speakers with scores higher than the decision threshold will be
+     *          considered a match for the target speaker.
+     */
+    public native double decisionThreshold() throws AlizeException;
+
+    /*! \fn void SimpleSpkDetSystem::setDecisionThreshold(double newValue)
+     *  \brief  Sets the theshold used in verifySpeaker() and identifySpeaker()
+     *          Only speakers with scores higher than the decision threshold will be
+     *          considered a match for the target speaker.
+     *
+     *  \param[in]      newValue        the new decision threshold
+     */
+    public native void setDecisionThreshold(double newValue) throws AlizeException;
+
     /**
      * Receive an audio signal as 16-bit signed integer linear PCM, parameterize it and add it to the feature server.
      * @param linearPCMSamples Audio data, as 16-bit signed integer linear PCM.
